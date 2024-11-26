@@ -4,6 +4,8 @@ import Footer from '../Common/Footer';
 
 import {useState, useEffect} from 'react';
 
+import Navigation from '../Common/Navigation.js'
+
 export default function Attendance() {
 
   // Logic to fetch student fullname and rollno from API ->
@@ -11,7 +13,7 @@ export default function Attendance() {
 
   const fetchData = async () => {
     try{
-      const response = await fetch("http://localhost:4000/api/admin/student", {method : "GET"});
+      const response = await fetch("http://localhost:4000/admin/student", {method : "GET",credentials: "include"});
       const data = await response.json();
       setStudentData(data);
     } catch(err) {
@@ -23,7 +25,7 @@ export default function Attendance() {
     fetchData();
   }, []); 
 
-  // -------------------------------------------------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------
   // Logic to send request body to the API ->
 
   const [attendanceData, setAttendanceData] = useState([]);
@@ -37,7 +39,7 @@ export default function Attendance() {
 
   // Updating the attendanceData state when a dropdown value changes ->
   const handleAttendanceChange = (index, value) => {
-    if (value === 'absent') {
+    if (value === 'absent' && studentData[index].username !== "admin") {
       setAttendanceData((prevData) => { // setter function can also take a callback arrow function, run logic inside the arrow function and return the updated value like this.
         const updatedArr = [...prevData]; // Create a copy of the target array
         updatedArr[index] = value; // Update the value at the given index
@@ -51,7 +53,7 @@ export default function Attendance() {
 
     // Creating the request body object
     const requestBody = {
-      rollno: studentData.map((student) => student.rollno),
+      rollnos: studentData.filter((student) => student.username !== "admin").map((student) => student.rollno),
       attendance: attendanceData,
     };
 
@@ -65,6 +67,7 @@ export default function Attendance() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
+        credentials: "include"
       });
 
       if (response.ok) {
@@ -81,6 +84,7 @@ export default function Attendance() {
   // ----------------------------------------------------------------------------------------------------------
   return (
     <div>
+      <Navigation />
       <h1 className='white-heading'>Attendance</h1>
 
       <main>
@@ -90,7 +94,7 @@ export default function Attendance() {
             <div className="grid">
               {studentData.map((student, index) =>
 
-                student.fullname && student.rollno ? (
+                student.fullname && student.rollno && student.username !==  "admin" ? (
 
                   <div className="std-card" key={index}>
                     <img src="../images/Profile.png" alt="Profile" />
@@ -119,8 +123,8 @@ export default function Attendance() {
             <h1 className='white-heading'>Nothing Yet !!</h1>
           )}
 
-          <div className="btn">
-            <button type="submit">Submit</button>
+          <div className="submit-btn-admin-div">
+            <button className='submit-btn-admin' type="submit">Submit</button>
           </div>
 
         </form>

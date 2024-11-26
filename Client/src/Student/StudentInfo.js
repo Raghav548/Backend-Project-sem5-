@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, NavLink } from 'react-router-dom';
 import '../Styles/info.css';
+import {NavLink } from 'react-router-dom';
+
+import Navigation from '../Common/Navigation.js'
 
 const Info = () => {
 
@@ -21,14 +23,14 @@ const Info = () => {
       }
   )
 
-  const { name } = useParams(); // Extract the 'name' parameter from the URL
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/student/${name}`, { method: "GET" });
+      const response = await fetch(`http://localhost:4000/student-info`, { method: "GET" , credentials: "include"});
 
       const data = await response.json();
-      setFormData(data);
+      console.log(data);
+      setFormData(data.student);
     } catch (error) {
       console.error("Error fetching student data:", error);
     }
@@ -39,8 +41,9 @@ const Info = () => {
   },[])
 
   return (
-      
-      formData && formData.fullname === name? (
+      <>
+      <Navigation/>
+      {formData && formData.fullname? (
         <div className="student-card">
           <h2>Student Details</h2>
           <br />
@@ -88,8 +91,8 @@ const Info = () => {
             <button>Register</button>
           </NavLink>
         </div>
-      )
-      
+      )}
+      </>
   );
 }
 

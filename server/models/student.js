@@ -11,10 +11,12 @@ const attendanceSchema = new mongoose.Schema(
 
 const studentSchema = new mongoose.Schema(
   {
-    fullname: { type: String },
+    username : {type : String, required : true},
+    password: { type: String,required: true },
+    fullname : { type : String},
     rollno: { type: Number },
     dob: { type: String },
-    email: { type: String },
+    email: { type: String},
     mobno: { type: String },
     gender: { type: String },
     father: { type: String },
@@ -23,35 +25,52 @@ const studentSchema = new mongoose.Schema(
     city: { type: String },
     state: { type: String },
     nat: { type: String },
-    attendance : attendanceSchema // Mongoose models cannot be embedded into another schema. Hence, attendanceSchema is directly used here.
+    attendance : attendanceSchema
   }
 )
 
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+// *********************************************************************************************************
 
+// pre-save hooks are functions that run before saving a document to the database.
+
+studentSchema.pre('save', async function(next) { // We can use "this" keyword inside non-arrow functions only.
+
+  if(this.isNew){ // this.isNew property return true if the document is new and not saved inside mongoose.
+
+    // Generate a salt (default rounds = 10)
+    const salt = await bcrypt.genSalt(10);
+
+    // Hash the password using the generated salt
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+})
+
+const Users = mongoose.model('Users', studentSchema);
+
+// *********************************************************************************************************
 // Function to markAttendance
 async function markAttendance(rollnos, attendance){
 
-  const students = await Users.find();
+  const students = await Users.find(); // find() returns an array of student objects
   
   for (let i = 0; i < rollnos.length; i++) {
 
     // Check if the student exists in the 'students' array
     let student = students.find(s => s.rollno === rollnos[i]);
 
-    // If student attendance doesn't exist
+    // If student doesn't exist
     if(!student.attendance){
-
-        student.attendance = {
+      student.attendance = {
           attended : attendance[i] === 'present' ? 1 : 0,
           delivered : 1,
           percentage : 0
-        };
-      
-        await student.save();
+        }
+
+      await student.save();
     }
 
-    // If student attendance exists
+    // If student exists
     else {
       student.attendance.delivered++;
 
@@ -67,25 +86,9 @@ async function markAttendance(rollnos, attendance){
       // Saving the updated student data to the database
       await student.save();
     }
+
   }
+
 };
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-// pre-save hooks are functions that run before saving a document to the database.
-
-// studentSchema.pre('save', async function(next) { // We can use "this" keyword inside non-arrow functions only.
-
-//   if(this.isNew){ // this.isNew property return true if the document is new and not saved inside mongoose.
-
-//     // Generate a salt (default rounds = 10)
-//     const salt = await bcrypt.genSalt(10);
-
-//     // Hash the password using the generated salt
-//     this.password = await bcrypt.hash(this.password, salt);
-//   }
-//   next();
-// })
-
-const Users = mongoose.model('Users', studentSchema);
 
 module.exports = {Users, markAttendance};

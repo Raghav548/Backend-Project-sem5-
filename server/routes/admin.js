@@ -2,9 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
-const {Users, markAttendance} = require("../models/student");
+const { Users , markAttendance}= require("../models/student");
+const {verifyToken} = require("./auth");
+console.log('admin routes loaded');
 
-// router.get("/attendance", async (request, response) => {
+// router.get("/attendance",verifyToken, async (request, response) => {
 
 //   const students = await Users.find();
     
@@ -12,18 +14,18 @@ const {Users, markAttendance} = require("../models/student");
     
 // })
 
-router.post("/attendance", (request, response) => {
+router.post("/attendance",verifyToken, (request, response) => {
   const stuDetails = request.body;
   console.log(stuDetails);
 
-  markAttendance(stuDetails.rollno, stuDetails.attendance);
+  markAttendance(stuDetails.rollnos, stuDetails.attendance);
 
   response.status(200).send("Attendance marked successfully");
 
 })
 
 
-router.get("/student", async (request, response) => {
+router.get("/student", verifyToken, async (request, response) => {
 
   const students = await Users.find();
 

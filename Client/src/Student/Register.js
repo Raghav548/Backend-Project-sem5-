@@ -11,7 +11,7 @@ const Register = () => {
       email: "",
       mobno: "",
       gender: "",
-      father: "", 
+      father: "",
       mother: "",
       bldgrp: "",
       city: "",
@@ -33,16 +33,19 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/api/register", {
+      const response = await fetch("http://localhost:4000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
+        credentials: "include", // This ensures cookies are sent with the requ
       });
       if (response.ok) {
         alert("Registration successful!");
+        window.location.href = "/";
       } else {
+        console.log(response);
         alert("Registration failed. Please try again.");
       }
     } catch (error) {
@@ -132,7 +135,7 @@ const Register = () => {
           </div>
         </div>
 
-        <button className="Btn" type="submit">
+        <button className="Btn" type="submit" >
           <span className="btnText">Submit</span>
         </button>
 
