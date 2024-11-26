@@ -24,7 +24,7 @@ main h1 {
   justify-content: space-around;
 }
 
-.student-card {
+.std-card {
   color: white;
   background-color: #165a84;
   padding: 20px;
@@ -37,7 +37,7 @@ main h1 {
   align-items: center;
 }
 
-.student-card img {
+.std-card img {
   width: 100px;
 }
 
@@ -72,7 +72,7 @@ button {
   border-radius: 20px;
 }
 
-.call-to-action {
+.call-to-act {
   background-image: linear-gradient(to right ,#99987D, #FFFDD0);
   padding: 60px 0px;
   border-radius: 20px;
@@ -85,17 +85,17 @@ button {
   border-radius: 20px;
 }
 
-.call-to-action h2 {
+.call-to-act h2 {
   font-size: 36px;
   margin: 0 0 20px;
 }
 
-.call-to-action p {
+.call-to-act p {
   font-size: 18px;
   margin: 0 0 20px;
 }
 
-.call-to-action button {
+.call-to-act button {
   padding: 10px 20px;
   border: none;
   background-color: #0e2a4d;

@@ -1,18 +1,10 @@
-import React from 'react';
-import Head from '../../../Components/head.js';
-import Navigation from '../../../Components/navigation.js';
-import Footer from '../../../Components/Footer.js'; 
-
-import '../Styles/Home.css'; 
-import '..Styles/Footer.css'; 
+import Footer from '../Common/Footer';
+import '../Styles/home.css';
 
 export default function Home() {
   return (
     <div>
-      <Head />
-      <Navigation />
-
-      <div className="container">
+      <div className="home-container">
         <div className="text-section">
           <h1 className="heading-1">Welcome To</h1>
           <h1 className="heading-2">Campus Sphere</h1>
@@ -76,7 +68,8 @@ export default function Home() {
           </section>
           */}
 
-      <Footer />
+      <Footer/>
+
     </div>
   );
 }
