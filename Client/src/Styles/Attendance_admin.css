@@ -55,12 +55,12 @@ main h1 {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.btn {
+.submit-button-admin-div {
   width : fit-content;
   margin: auto;
 }
 
-button {
+.submit-button-admin-div .submit-button-admin {
   padding: 10px 20px;
   border: none;
   background-color: #1c4d8a;

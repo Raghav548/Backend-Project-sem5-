@@ -1,27 +1,30 @@
-import "../Styles/login_signup.css"
+import "../Styles/login_signup.css";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
-  // const [formData, setFormData] = useState({
-  //   username: "",
-  //   password: "",
-  //   rememberMe: false,
-  // });
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: type === "checkbox" ? checked : value,
-  //   }));
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // Add form submission logic here
-  //   console.log("Form submitted with data: ", formData);
-  // };
-
-  const error = null;
+  const handleSignup = async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/signup",
+        { username, password },
+        { withCredentials: true }
+      );
+      alert("Signup successful");
+      if (response.status === 201) {
+        navigate("/login"); // Redirect to login page
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Signup failed");
+    }
+  };
 
   return (
     <div className="body">
@@ -29,20 +32,15 @@ const SignUpPage = () => {
         <div className="login-form-7">
           <div className="frame-27">
             <div className="text-55">Sign Up</div>
-            {error && (
-              <p style={{ color: "red", marginTop: 0, marginBottom: 0 }}>
-                {error}
-              </p>
-            )}
-            <form action="/signUp" method="POST">                  {/*Form begins here*/}
+            <form onSubmit={handleSignup}> {/* Attach handleSignup to form's onSubmit */}
               <div className="username-field-3">
                 <div className="text-56">USERNAME</div>
                 <input
                   type="text"
                   className="username_input"
                   name="username"
-                  // value={formData.username}
-                  // onChange={handleChange}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
@@ -53,8 +51,8 @@ const SignUpPage = () => {
                   type="password"
                   className="password_input"
                   name="password"
-                  // value={formData.password}
-                  // onChange={handleChange}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
@@ -62,22 +60,7 @@ const SignUpPage = () => {
               <button type="submit" className="sign_in_button-14">
                 <div className="text-57">Sign Up</div>
               </button>
-
-              <div className="signin_sols-8">
-                <div className="remember_me-8">
-                  <input
-                    type="checkbox"
-                    id="checkbox"
-                    name="rememberMe"
-                    className="checkbox"
-                    // checked={formData.rememberMe}
-                    // onChange={handleChange}
-                  />
-                  <div className="text-58">Remember Me</div>
-                </div>
-                <div className="text-59">Forgot Password?</div>
-              </div>
-            </form>                            {/*Form ends here*/}
+            </form>
           </div>
 
           <div className="frame-28">
@@ -87,7 +70,7 @@ const SignUpPage = () => {
             </div>
             <div className="text-60">Already have an account?</div>
             <button
-              onClick={() => (window.location.href = "http://localhost:3000/login")}
+              onClick={() => navigate("/login")}
               className="sign_up_button-6"
             >
               <div className="text-61">Log In</div>

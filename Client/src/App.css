@@ -49,9 +49,9 @@ h1{
   font-size: 16px;
 }
 
-.nav-list a:hover,
-.nav-list a:active,
-.nav-list a.active {
+.nav-list li a:hover,
+.nav-list li a:active,
+.nav-list li a.active {
   color: #0078B8;
   cursor: pointer;
 }
@@ -71,6 +71,10 @@ h1{
   font-weight: 500;
   color : white;
   font-size: 16px;
+}
+
+.auth-buttons .logout {
+  color: white;
 }
 
 .auth-buttons a:hover,

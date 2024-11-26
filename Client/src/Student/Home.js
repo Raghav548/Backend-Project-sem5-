@@ -1,9 +1,16 @@
+import React from 'react';
 import Footer from '../Common/Footer';
+import '../App.css'
 import '../Styles/home.css';
+import {Link} from 'react-router-dom';
+
+import Navigation from '../Common/Navigation.js'
 
 export default function Home() {
   return (
     <div>
+      <Navigation />
+
       <div className="home-container">
         <div className="text-section">
           <h1 className="heading-1">Welcome To</h1>
@@ -15,7 +22,8 @@ export default function Home() {
       </div>
 
       <section className="courses-section">
-        <h2>Our Courses</h2>
+        <h2>Quizes</h2>
+        <Link to="/quiz"><button className="ria-button">Start</button></Link>
         <div className="courses-container">
           <div className="course-card">
             <img src="/images/WebDevLogo.png" alt="Web Development" />

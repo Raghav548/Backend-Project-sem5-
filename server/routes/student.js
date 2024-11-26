@@ -1,54 +1,113 @@
 const express = require('express');
-
+const res = require('express/lib/response');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-const { Users } = require('../models/student');
+const { Users }= require('../models/student');
+const {verifyToken} = require("./auth");
 
-router.get("/student/:name", async (request, response) => {
+function tokenVerifier(req, res) {
+  // Step 1: Extract token
+  const token = req.cookies.token;
 
-  const {name} = request.params;
+  if (!token) {
+    throw new Error("Unauthorized: Token not found"); // Throw error if no token
+  }
 
-  const student = await Users.findOne( {fullname : name} );
+  // Step 2: Decode token
+  const secretKey = process.env.JWT_SECRET || 'secret'; // Use the same secret key used to sign the token
+  try {
+    return jwt.verify(token, secretKey); // Decode and verify the token
+  } catch (err) {
+    throw new Error( err); // Throw error for invalid tokens
+  }
+}
 
-  // response.render("student/info", {pageTitle : "Student page", path : "/student", user : request.session.user, student : student});
-  response.json(student);
 
-})
+router.post("/register", async (req, res) => {
+  try {
+    // Verify and decode token
+    const decoded = tokenVerifier(req, res);
 
-router.post("/register", async (request, response) => {
+    // Ensure decoded token contains the required fields
+    if (!decoded.username) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
 
-  const {fullname, rollno, dob, email, mobno, gender, father, mother, bldgrp, city, state, nat} = request.body;
-  console.log(request.body);
+    const username = decoded.username;
+    const stuDetails = req.body; // Extract student details from request body
 
-  // const user = await Users.findOne( { username : request.session.user.name } )
+    // Update student details
+    const updatedStd = await Users.findOneAndUpdate(
+      { username }, // Match user by username
+      { $set: stuDetails }, // Update with new details
+      { new: true } // Return the updated document
+    );
 
-  // Object.assign(user, {fullname, rollno, dob, email, mobno, gender, father, mother, bldgrp, city, state, nat}) // Easy way to assign values to an object in js
+    // Handle case where user is not found
+    if (!updatedStd) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  // await user.save();
+    res.status(200).json({ message: "Registration successful", user: updatedStd });
+  } catch (err) {
+    // Handle errors (e.g., token verification or database errors)
+    console.error("Error in /register route:", err.message);
+    res.status(500).json({ message: err.message || "Server error while registration" });
+  }
+});
 
-  await Users.create(
-    {fullname, rollno, dob, email, mobno, gender, father, mother, bldgrp, city, state, nat}
-  );
+router.get("/attendance/fetchAttendance", async (req, res) => {
 
-  response.status(200).send("Registration successful!"); // Sending response to the client side for "response.ok" to work on that side
+  try {
+    const decoded = tokenVerifier(req,res);
+    const username = decoded.username;
 
-  // response.redirect(`/student/${request.session.user.name}`);
+    if (!username) {
+      return res.status(400).json({ message: "username missing in token" });
+    }
 
-})
+    // Step 3: Query database
+    const student = await Users.findOne({ username });
+    const studentAttendance = student.attendance;
 
-router.get("/attendance/:name", async (request, response) => {
+    if (!studentAttendance) {
+      return res.status(404).json({ message: "Attendance not found" });
+    }
 
-  const {name} = request.params;
-
-  // const student = await Users.findOne( {fullname : name} );
-  // console.log(student);
-
-  const student = await Users.findOne( {fullname : name} );
-
-  response.json(student);
-
+    // Step 4: Respond with attendance data
+    res.json({studentAttendance, username});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
   // response.render("student/attendance", {pageTitle : "Attendance", path : "/attendance", student : student, studentAttendance : studentAttendance, user : request.session.user});
   
+})
+
+router.get("/student-info", async (req, res) => {
+
+  try {
+    const decoded = tokenVerifier(req,res);
+    const username = decoded.username;  
+
+    if (!username) {
+      return res.status(400).json({ message: "username missing in token" });
+    }
+
+    // Step 3: Query database
+    const student = await Users.findOne({ username });
+
+    if (!student) { 
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Step 4: Respond with student data
+    res.json({student, username});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }  
 })
 
 

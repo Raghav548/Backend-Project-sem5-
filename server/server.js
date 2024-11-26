@@ -4,6 +4,12 @@ const cors = require("cors");
 require('dotenv').config();
 
 const app = express();
+const cookieParser = require("cookie-parser");
+
+const {router:authRoutes,verifyToken} = require("./routes/auth");
+
+
+
 
 // Connecting Express with MongoDB ->
 const mongoURI = process.env.MONGO_URI;
@@ -18,15 +24,25 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   });
 
 // Allowing cross-origin requests for your React client ->
-app.use(cors());
+// Enable CORS with specific origin and credentials
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only this origin
+  credentials: true, // Allow cookies and other credentials
+}));
+app.use(cookieParser());
 
 const userRoutes = require("./routes/student");
 const adminRoutes = require("./routes/admin");
+const quizRoutes = require("./routes/quizRoutes");
 
-app.use(express.json()); // to parse the request body object coming from client
+app.use(express.json()); // to parse the input data body coming from client
+app.use(express.urlencoded( {extended : true} ));
 
-app.use("/api/admin", adminRoutes);
-app.use("/api", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/admin", adminRoutes);
+app.use(userRoutes);
+app.use(quizRoutes);
+
 
 app.listen(port, () => {
   console.log(`Server starting at http://localhost:${port}`);
