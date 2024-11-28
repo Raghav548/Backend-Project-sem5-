@@ -4,8 +4,6 @@ import Footer from '../Common/Footer';
 
 import {useState, useEffect} from 'react';
 
-import Navigation from '../Common/Navigation.js'
-
 export default function Attendance() {
 
   // Logic to fetch student fullname and rollno from API ->
@@ -25,24 +23,35 @@ export default function Attendance() {
     fetchData();
   }, []); 
 
-  // ----------------------------------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------------------------------------------------------
   // Logic to send request body to the API ->
 
-  const [attendanceData, setAttendanceData] = useState([]);
+  const [attendanceData, setAttendanceData] = useState({});
 
   // The second argument of useEffect ([studentData]) tells React to only run the effect when the studentData array changes.
   // After the data is fetched and studentData is populated (via setStudentData), useEffect will be triggered.
+
   useEffect(() => {
-    setAttendanceData(studentData.map(() => 'present'));  // Default value of attendanceData is set to all 'present'
+    // reduce() is a JavaScript array method that iterates over all elements in an array and accumulates a result into a single value (in this case, an object).
+
+    const initialAttendance = studentData.reduce((acc, student) => {
+      if (student.username !== "admin" && student.fullname) {
+        acc[student.username] = 'present'; // Default value of 'present' for each student
+      }
+      return acc;
+    }, {}); // <- Here, {} is the initial value of accumulator(acc)
+
+    setAttendanceData(initialAttendance);
+
   }, [studentData]);
 
 
   // Updating the attendanceData state when a dropdown value changes ->
-  const handleAttendanceChange = (index, value) => {
-    if (value === 'absent' && studentData[index].username !== "admin") {
+  const handleAttendanceChange = (username, value) => {
+    if (value === 'absent') {
       setAttendanceData((prevData) => { // setter function can also take a callback arrow function, run logic inside the arrow function and return the updated value like this.
-        const updatedArr = [...prevData]; // Create a copy of the target array
-        updatedArr[index] = value; // Update the value at the given index
+        const updatedArr = {...prevData}; // Create a copy of the target array
+        updatedArr[username] = value; // Update the value at the given index
         return updatedArr;
       });
     }
@@ -54,7 +63,11 @@ export default function Attendance() {
     // Creating the request body object
     const requestBody = {
       rollnos: studentData.filter((student) => student.username !== "admin").map((student) => student.rollno),
-      attendance: attendanceData,
+
+      attendance: Object.entries(attendanceData).map(([username, status]) => ({ // Object.entries(attendanceData) will return an array of arrays
+        username,
+        status,
+      }))
     };
 
     console.log(requestBody);
@@ -84,50 +97,48 @@ export default function Attendance() {
   // ----------------------------------------------------------------------------------------------------------
   return (
     <div>
-      <Navigation />
       <h1 className='white-heading'>Attendance</h1>
 
       <main>
-        <form onSubmit={handleSubmit}>
-          {studentData.length > 0 ? (
+          {studentData.length > 0 && studentData.some(student => student.fullname)? (
+            <form onSubmit={handleSubmit}>
 
             <div className="grid">
               {studentData.map((student, index) =>
 
                 student.fullname && student.rollno && student.username !==  "admin" ? (
 
-                  <div className="std-card" key={index}>
-                    <img src="../images/Profile.png" alt="Profile" />
+                    <div className="std-card" key={index}>
+                      <img src="../images/Profile.png" alt="Profile" />
 
-                    <p>{student.fullname}</p>
+                      <p>{student.fullname}</p>
 
-                    <p>{student.rollno}</p>
+                      <p>{student.rollno}</p>
 
-                    <select
-                      name="attendance"
-                      id="attendance"
-                      value={attendanceData[index]}
-                      onChange={(e) => handleAttendanceChange(index, e.target.value)}
-                      className="attendance-dropdown"
-                      required
-                    >
-                      <option value="present">Present</option>
-                      <option value="absent">Absent</option>
-                    </select>
-                  </div>
+                      <select
+                        name="attendance"
+                        id="attendance"
+                        value={attendanceData[student.username] || 'present'}
+                        onChange={(e) => handleAttendanceChange(student.username, e.target.value)}
+                        className="attendance-dropdown"
+                        required
+                      >
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                      </select>
+                    </div>
 
                 ) : null
               )}
             </div>
+            <div className='submit-btn-admin-div'>
+              <button className="submit-btn-admin" type="submit">Submit</button>
+            </div>
+          </form>
           ) : (
             <h1 className='white-heading'>Nothing Yet !!</h1>
           )}
 
-          <div className="submit-btn-admin-div">
-            <button className='submit-btn-admin' type="submit">Submit</button>
-          </div>
-
-        </form>
       </main>
 
       <section className="call-to-act">

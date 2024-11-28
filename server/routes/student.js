@@ -1,9 +1,10 @@
 const express = require('express');
 const res = require('express/lib/response');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 const router = express.Router();
 
-const { Users }= require('../models/student');
+const { Users }= require('../models/user');
 const {verifyToken} = require("./auth");
 
 function tokenVerifier(req, res) {
@@ -69,14 +70,13 @@ router.get("/attendance/fetchAttendance", async (req, res) => {
 
     // Step 3: Query database
     const student = await Users.findOne({ username });
-    const studentAttendance = student.attendance;
 
-    if (!studentAttendance) {
+    if (!student.attendance) {
       return res.status(404).json({ message: "Attendance not found" });
     }
 
     // Step 4: Respond with attendance data
-    res.json({studentAttendance, username});
+    res.json({student, username});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -110,5 +110,51 @@ router.get("/student-info", async (req, res) => {
   }  
 })
 
+
+
+// Multer setup for file uploads ->
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Save files in the 'uploads' directory
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// POST route to handle form submission ->
+router.post("/medical-form-submit", upload.single("file"), async (req, res) => {
+
+  // .single("file") => This specifies that the request expects a single file to be uploaded. The string "file" corresponds to the name attribute of the file input field in the frontend React HTML form.
+  try {
+    const { name, rollNumber, department, startDate, endDate } = req.body;
+    console.log(req.body);
+    console.log(req.file.path);
+
+    // Create and save a new document
+    const student = await Users.findOne({rollno : Number(rollNumber), fullname : name.trim()});
+
+    console.log("Student document from mongoDB -> ", student);
+
+    const newMedicalRecord = {
+      department,
+      startDate,
+      endDate,
+      filePath: req.file.path, // Save the uploaded file's path
+    };
+
+    student.medicalRecords.push(newMedicalRecord);
+
+    await student.save();
+
+    res.status(201).json({ message: "Form data saved successfully!" });
+  } catch (error) {
+    console.error("Error saving form data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

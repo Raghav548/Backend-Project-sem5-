@@ -1,8 +1,6 @@
 import '../Styles/attendance.css';
 import {useState, useEffect} from 'react';
 
-import Navigation from '../Common/Navigation.js'
-
 export default function Info () {
 
   const [stdList, setStdList] = useState([]);
@@ -20,13 +18,11 @@ export default function Info () {
 
   return (
     <div>
-      <Navigation />
-      {stdList.length === 0 ? (
-        <h1>Nothing Yet !!</h1>
+      {stdList.length === 0 || stdList.filter(student => student.fullname).length === 0 ? (
+        <h1 className='white-heading'>Nothing Yet !!</h1>
       ) : (
 
-        stdList.map((student, index) => {
-          if(student.username === "admin") return null;
+        stdList.filter(student => student.fullname).map((student, index) => {
           
           const { fullname, rollno } = student;
 
@@ -36,14 +32,21 @@ export default function Info () {
 
           return (
             <div className="attendance-card" key={index}>
-              <ul style={{ listStyleType: 'none' }}>
-                <h3>Name: {fullname}</h3>
-                <li>Roll number: {rollno}</li>
-                <li>Attended: {attended}</li>
-                <li>Delivered: {delivered}</li>
-                <li>Percentage: {percentage !== "N/A" ? percentage + "%" : "N/A"}</li>
-              </ul> 
-            </div>
+              <h3>Attendance Info of {fullname}</h3>
+              <p>
+                <strong>Roll Number:</strong> {rollno}
+              </p>
+              <p>
+                <strong>Attended:</strong> {attended}
+              </p>
+              <p>
+                <strong>Delivered:</strong> {delivered}
+              </p>
+              <p>
+                <strong>Total Percentage:</strong>{" "}
+                {percentage !== "N/A" ? percentage + "%" : "N/A"}
+              </p>
+          </div>
           );
         })
 

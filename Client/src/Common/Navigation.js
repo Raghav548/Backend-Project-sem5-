@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink, Navigate, Outlet } from "react-router-dom";
 import axios from "axios"; // Ensure axios is installed and imported
 
 const Header = () => {
@@ -45,30 +45,34 @@ const Header = () => {
   };
 
   return (
-    <nav className="navbar">
-      <img src="/images/Logo.png" alt="Campus Sphere" />
+    <>
+      <nav className="navbar">
+        <img src="/images/Logo.png" alt="Campus Sphere" />
 
-      <ul className="nav-list">
-        <li><NavLink to={isAdmin ? "/admin" : "/"}>Home</NavLink></li>
-       <li><NavLink to={isAdmin ? "/admin/student" : "/student"}>Student Info</NavLink></li>
-        <li><NavLink to={isAdmin ? "/admin/attendance" : "/attendance"}>Attendance</NavLink></li>
-        <li><NavLink to={isAdmin ? "/admin/performance" : "/performance"}>Performance</NavLink></li>
-        <li><NavLink to = {isAdmin ? "/admin/contact" : "/contact"}>Contact Us</NavLink></li>
-        <div className="auth-buttons">
-          {isAuthenticated ? (
-            <>
-              <NavLink className="logout" onClick={handleLogout} style={{ cursor: "pointer" ,color:"white"}}>Logout</NavLink>
-            </>
-          ) : (
-            <>
-              <NavLink className="signup" to="/signup">Sign up</NavLink>
-              <span>|</span>
-              <NavLink className="login" to="/login">Login</NavLink>
-            </>
-          )}
-        </div>
-      </ul>
-    </nav>
+        <ul className="nav-list">
+          <li><NavLink to={isAdmin ? "/admin" : "/"} end>Home</NavLink></li>
+        <li><NavLink to={isAdmin ? "/admin/student" : "/student"}>Student Info</NavLink></li>
+          <li><NavLink to={isAdmin ? "/admin/attendance" : "/attendance"}>Attendance</NavLink></li>
+          <li><NavLink to={isAdmin ? "/admin/performance" : "/performance"}>Performance</NavLink></li>
+          <li><NavLink to = {isAdmin ? "/admin/contact" : "/contact"}>Contact Us</NavLink></li>
+          <div className="auth-buttons">
+            {isAuthenticated ? (
+              <>
+                <NavLink className="logout" onClick={handleLogout} style={{ cursor: "pointer" ,color:"white"}}>Logout</NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink className="signup" to="/signup">Sign up</NavLink>
+                <span>|</span>
+                <NavLink className="login" to="/login">Login</NavLink>
+              </>
+            )}
+          </div>
+        </ul>
+      </nav>
+
+      <Outlet/>
+    </>
   );
 };
 

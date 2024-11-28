@@ -37,6 +37,7 @@ const quizRoutes = require("./routes/quizRoutes");
 
 app.use(express.json()); // to parse the input data body coming from client
 app.use(express.urlencoded( {extended : true} ));
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoutes);
 app.use("/admin", adminRoutes);

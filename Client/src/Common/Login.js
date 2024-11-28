@@ -2,7 +2,6 @@ import '../Styles/login_signup.css';
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,6 +25,9 @@ const Login = () => {
         });
   
         const user = userResponse.data;
+
+        console.log(user);
+        
         if (user.username === "admin") {
           navigate("/admin");
         } else {

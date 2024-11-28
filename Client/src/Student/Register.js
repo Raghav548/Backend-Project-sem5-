@@ -3,22 +3,7 @@ import {useState} from "react";
 import "../Styles/register.css";
 
 const Register = () => {
-  const [formData, setFormData] = useState(
-    {
-      fullname: "",
-      rollno: "",
-      dob: "",
-      email: "",
-      mobno: "",
-      gender: "",
-      father: "",
-      mother: "",
-      bldgrp: "",
-      city: "",
-      state: "",
-      nat: "",
-    } // <- When handleChange is called for the 1st time, This object is the "prevFormData" object.
-  );
+  const [formData, setFormData] = useState({}); // <- When handleChange is called for the 1st time, This object is the "prevFormData" object.
 
   const handleChange = (e) => {
     setFormData((prevFormData) => {
