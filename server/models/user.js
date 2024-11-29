@@ -9,6 +9,15 @@ const attendanceSchema = new mongoose.Schema(
   }
 )
 
+const medicalSchema = new mongoose.Schema(
+  {
+    department: { type: String, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    filePath: { type: String, required: true }
+  }
+)
+
 const studentSchema = new mongoose.Schema(
   {
     username : {type : String, required : true},
@@ -25,7 +34,8 @@ const studentSchema = new mongoose.Schema(
     city: { type: String },
     state: { type: String },
     nat: { type: String },
-    attendance : attendanceSchema
+    attendance : attendanceSchema,
+    medicalRecords : [ medicalSchema ]
   }
 )
 
@@ -49,6 +59,20 @@ studentSchema.pre('save', async function(next) { // We can use "this" keyword in
 const Users = mongoose.model('Users', studentSchema);
 
 // *********************************************************************************************************
+// pre-save hook to save hashed file path
+
+medicalSchema.pre('save', async function(next) {
+
+  if(this.isNew){
+
+    const salt = await bcrypt.genSalt(10);
+
+    this.filePath = await bcrypt.hash(this.filePath, salt);
+  }
+  next();
+})
+
+// *********************************************************************************************************
 // Function to markAttendance
 async function markAttendance(rollnos, attendance){
 
@@ -62,7 +86,7 @@ async function markAttendance(rollnos, attendance){
     // If student doesn't exist
     if(!student.attendance){
       student.attendance = {
-          attended : attendance[i] === 'present' ? 1 : 0,
+          attended : attendance[i].status === 'present' ? 1 : 0,
           delivered : 1,
           percentage : 0
         }
@@ -74,7 +98,7 @@ async function markAttendance(rollnos, attendance){
     else {
       student.attendance.delivered++;
 
-      if (attendance[i] === 'present') student.attendance.attended++;
+      if (attendance[i].status === 'present') student.attendance.attended++;
 
       let per = (student.attendance.attended / student.attendance.delivered) * 100;
 

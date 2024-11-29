@@ -1,21 +1,21 @@
 import "../Styles/attendance.css"
 import {useState, useEffect} from 'react';
 
-import Navigation from '../Common/Navigation.js'
-
 const Attendance = () => {
 
-  const [studentAttendance, setstudentAttendance] = useState({});
+  const [studentData, setstudentData] = useState({});
+
+  const [userName, setUserName] = useState("");
 
   let username = "";
   const fetchData = async () => {
     try{
-      const response = await fetch(`http://localhost:4000/attendance/fetchAttendance`, {method : "GET"});
+      const response = await fetch(`http://localhost:4000/attendance/fetchAttendance`, {method : "GET", credentials : "include"});
       const data = await response.json();
       console.log(data);
-      username = data.username;
-      const {studentAttendance } = data;
-      setstudentAttendance(studentAttendance);
+      const {student, username } = data;
+      setstudentData(student);
+      setUserName(username);
     } catch(err) {
       console.log("Error in fetching single student data");
     }
@@ -27,34 +27,31 @@ const Attendance = () => {
 
   return (
     <div>
-
-      <Navigation />
       <h1 className="white-heading">Attendance</h1>
       
-      {username ? (
-        studentAttendance.fullname ? (
+      {userName ? (
+        studentData.fullname ? (
           // When student is registered, and attendance is uploaded
           <div className="attendance-card">
-            <h3>Subject</h3>
             <p>
-              <strong>Name:</strong> {studentAttendance.fullname}
+              <strong>Name:</strong> {studentData.fullname}
             </p>
             <p>
-              <strong>Roll Number:</strong> {studentAttendance.rollno}
+              <strong>Roll Number:</strong> {studentData.rollno}
             </p>
             <p>
-              <strong>Attended:</strong> {studentAttendance.attended}
+              <strong>Attended:</strong> {studentData.attendance?.attended}
             </p>
             <p>
               <strong>Absent:</strong>{" "}
-              {studentAttendance.delivered - studentAttendance.attended}
+              {studentData.attendance?.delivered - studentData.attendance?.attended}
             </p>
             <p>
-              <strong>Delivered:</strong> {studentAttendance.delivered}
+              <strong>Delivered:</strong> {studentData.attendance?.delivered}
             </p>
             <p>
               <strong>Total Percentage:</strong>{" "}
-              {studentAttendance.percentage}%
+              {studentData.attendance?.percentage}%
             </p>
           </div>
         ) : (

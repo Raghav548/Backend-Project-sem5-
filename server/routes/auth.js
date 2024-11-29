@@ -1,8 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { Users } = require('../models/student');
-const Admins = require('../models/admin');
+const { Users } = require('../models/user');
 
 const router = express.Router();
 console.log("auth routes loaded");
@@ -88,10 +87,10 @@ router.post('/logout', (req, res) => {
 router.get('/verify', (req, res) => {
     const token = req.cookies.token;
     if (!token) return res.status(403).json({ message: "No token provided" });
-
+    
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) return res.status(401).json({ message: "Unauthorized" });
-        res.status(200).json({ message: "Protected data", username: decoded.username });
+        res.status(200).json( {message: "Protected data", username: decoded.username });
     });
 }); 
 

@@ -4,13 +4,9 @@ import '../App.css'
 import '../Styles/home.css';
 import {Link} from 'react-router-dom';
 
-import Navigation from '../Common/Navigation.js'
-
 export default function Home() {
   return (
     <div>
-      <Navigation />
-
       <div className="home-container">
         <div className="text-section">
           <h1 className="heading-1">Welcome To</h1>
@@ -23,19 +19,21 @@ export default function Home() {
 
       <section className="courses-section">
         <h2>Quizes</h2>
-        <Link to="/quiz"><button className="ria-button">Start</button></Link>
         <div className="courses-container">
           <div className="course-card">
             <img src="/images/WebDevLogo.png" alt="Web Development" />
             <h3>Web Development</h3>
+            <Link to="/quiz"><button className="ria-button">Start</button></Link>
           </div>
           <div className="course-card">
             <img src="/images/MLlogo.png" alt="Machine Learning" />
             <h3>Machine Learning</h3>
+            <Link to="/quiz"><button className="ria-button">Start</button></Link>
           </div>
           <div className="course-card">
             <img src="/images/CppLogo.png" alt="C++ Programming" />
             <h3>C++ Programming</h3>
+            <Link to="/quiz"><button className="ria-button">Start</button></Link>
           </div>
         </div>
       </section>

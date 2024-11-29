@@ -6,7 +6,7 @@
     position: relative;
     border-radius: 6px;
     padding: 30px;
-    margin: 0 15px;
+    margin: 50px 280px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 .container header{
@@ -19,9 +19,6 @@
     position: relative;
     margin-top: 16px;
     min-height: 490px;
-    /* background-color: #fff; */
-
-
     background-color: #f2f2f2;
 }
 .container header::before{

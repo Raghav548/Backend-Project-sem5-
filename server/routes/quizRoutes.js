@@ -4,7 +4,6 @@ const path = require("path");
 router.use(express.json());
 
 const { google } = require('googleapis');
-const { appendFile } = require("fs");
 
 const sheets = google.sheets({ version: 'v4' });
 // Fetch quiz data from Google Sheets and store it globally
@@ -12,29 +11,28 @@ async function fetchQuizData() {
   try {
     const spreadsheetId = '18qb6W6v5iMLL-1Ow6OhgmNK9aJkW-es3cMhcfSMrHr0';  // Replace with your sheet ID
     const range = 'Sheet1!A1:H10';                                      // The range you want to fetch
-    const apiKey = 'AIzaSyC0vMvWvxG5kULZAXtzZ35a7_El7FTxSxk';            // Replace with your API Key
+    const apiKey = process.env.API_KEY;            // Replace with your API Key
     
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range,
+      range,  
       key: apiKey
     });
 
-    quizData = response.data.values; // Store the quiz data globally
-    console.log('Fetched quiz data:', quizData);
+    quizData = response.data.values; // extract quiz data
+    return quizData;
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error.message);
   }
 }
 
-// Fetch the quiz data when the server starts
-fetchQuizData();
 
  
 
 
 
-router.post('/api/submit-quiz', (req, res) => {
+router.post('/api/submit-quiz', async (req, res) => {
+    const quizData = await fetchQuizData();
     const userAnswers = req.body.answers; // Object with questionId: userAnswer
     if (!userAnswers) {
       return res.status(400).json({ error: 'Answers are required' });
@@ -56,9 +54,10 @@ router.post('/api/submit-quiz', (req, res) => {
   });
 
   router.get('/api/get-quiz', async (req, res) => {
-    const filteredQuizData = quizData.slice(1);
+    const quizData = await fetchQuizData();
+    const filteredQuizData =  quizData.slice(1);
     console.log("quiz data",quizData);
     res.json(filteredQuizData); // Send the quiz data to the frontend
   });
   
- module.exports = router; 
+ module.exports = router;
