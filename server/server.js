@@ -34,6 +34,7 @@ app.use(cookieParser());
 const userRoutes = require("./routes/student");
 const adminRoutes = require("./routes/admin");
 const quizRoutes = require("./routes/quizRoutes");
+const razorpayRoutes = require("./routes/razorpayRoutes");
 
 app.use(express.json()); // to parse the input data body coming from client
 app.use(express.urlencoded( {extended : true} ));
@@ -43,6 +44,8 @@ app.use("/api/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use(userRoutes);
 app.use(quizRoutes);
+app.use("/api/payment", razorpayRoutes); // Razorpay payment routes
+
 
 
 app.listen(port, () => {
