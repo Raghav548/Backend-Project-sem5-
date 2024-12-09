@@ -18,7 +18,6 @@ router.post("/attendance",verifyToken, (request, response) => {
 
 
 router.get("/student", verifyToken, async (request, response) => {
-
   const students = await Users.find();
 
   response.json(students);
