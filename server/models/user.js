@@ -21,7 +21,7 @@ const medicalSchema = new mongoose.Schema(
 const studentSchema = new mongoose.Schema(
   {
     username : {type : String, required : true},
-    password: { type: String,required: true },
+    password: { type: String, required: true },
     fullname : { type : String},
     rollno: { type: Number },
     dob: { type: String },
@@ -34,6 +34,8 @@ const studentSchema = new mongoose.Schema(
     city: { type: String },
     state: { type: String },
     nat: { type: String },
+    profileimg : {type: String},
+    profileimgindex : {type: String},
     attendance : attendanceSchema,
     medicalRecords : [ medicalSchema ]
   }
@@ -45,14 +47,19 @@ const studentSchema = new mongoose.Schema(
 
 studentSchema.pre('save', async function(next) { // We can use "this" keyword inside non-arrow functions only.
 
-  if(this.isNew){ // this.isNew property return true if the document is new and not saved inside mongoose.
+  // Generate a salt (default rounds = 10)
+  const salt = await bcrypt.genSalt(10);
 
-    // Generate a salt (default rounds = 10)
-    const salt = await bcrypt.genSalt(10);
+  if(this.isModified('password')){ // this.isNew property return true if the document is new and not saved inside mongoose.
 
     // Hash the password using the generated salt
     this.password = await bcrypt.hash(this.password, salt);
   }
+
+  if(this.isModified('profileimg')){
+    this.profileimg = await bcrypt.hash(this.profileimg, salt);
+  }
+
   next();
 })
 

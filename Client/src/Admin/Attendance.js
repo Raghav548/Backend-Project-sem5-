@@ -109,7 +109,14 @@ export default function Attendance() {
                 student.fullname && student.rollno && student.username !==  "admin" ? (
 
                     <div className="std-card" key={index}>
-                      <img src="../images/Profile.png" alt="Profile" />
+                      <img src={student.profileimg || "../images/Profile.png"} alt="Profile" 
+                        style={{
+                          borderRadius: "50%", // Rounds the corners
+                          width: "100px", // Adjust as needed
+                          height: "100px", // Adjust to maintain aspect ratio
+                          objectFit: "cover" // Ensures the image scales correctly within the rounded frame
+                        }}
+                      />
 
                       <p>{student.fullname}</p>
 
