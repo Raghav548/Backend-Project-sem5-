@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { Users } = require('../models/user');
+const {Users} = require('../models/user');
 
 const router = express.Router();
 console.log("auth routes loaded");
@@ -9,6 +9,7 @@ console.log("auth routes loaded");
 const verifyToken = (req, res, next) => {
     // Get the token from cookies
     const token = req.cookies.token;
+    console.log("token: ",token);
 
     if (!token) {
         return res.status(403).json({ message: "No token provided" });

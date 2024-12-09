@@ -35,7 +35,8 @@ const studentSchema = new mongoose.Schema(
     state: { type: String },
     nat: { type: String },
     attendance : attendanceSchema,
-    medicalRecords : [ medicalSchema ]
+    medicalRecords : [ medicalSchema ], // Array of medical records
+    score :{type: [Number], default: [null, null, null] }
   }
 )
 

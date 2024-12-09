@@ -13,9 +13,12 @@ import Contact from './Student/Performance.js'
 
 import AdminAttendance from './Admin/Attendance.js';
 import AdminStudentInfo from './Admin/StudentInfo.js';
+import Performance_Admin from './Admin/Performance-admin.js'
 import './App.css'
 
-import QuizApp from './Student/QuizApp.js'
+import QuizApp_1 from './Student/QuizApp-1.js'
+import QuizApp_2 from './Student/QuizApp-2.js'
+import QuizApp_3 from './Student/QuizApp-3.js'
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'; // Router just renders the component according to the navigation links set through NavLinks
 
@@ -30,7 +33,9 @@ function App() {
         <Route path="/signup" element={<SignupPage />}/>
 
         <Route path="/register" element={<Register />} />
-        <Route path="/quiz" element={<ProtectedRoute><QuizApp /></ProtectedRoute>} />
+        <Route path="/quiz-Web_dev" element={<ProtectedRoute><QuizApp_1 /></ProtectedRoute>} />
+        <Route path="/quiz-ML" element={<ProtectedRoute><QuizApp_2 /></ProtectedRoute>} />
+        <Route path="/quiz-Cpp" element={<ProtectedRoute><QuizApp_3 /></ProtectedRoute>} />
         <Route path='/apply-medical' element={<Medical />}/>
 
         {/*Student Routes */}
@@ -46,7 +51,7 @@ function App() {
           <Route path="/admin" element={<Home />} />
           <Route path="/admin/attendance" element={<ProtectedRoute><AdminAttendance /></ProtectedRoute>} />
           <Route path="/admin/student" element={<ProtectedRoute><AdminStudentInfo /></ProtectedRoute>} />
-          <Route path="/admin/performance" element={<Performance />} />
+          <Route path="/admin/performance" element={<Performance_Admin />} />
           <Route path="/admin/contact" element={<Contact />} />
         </Route>
 
