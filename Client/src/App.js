@@ -18,6 +18,7 @@ import EditProfileImage from './Student/EditProfileImage.js'
 import UpdateProfile from './Student/UpdateProfile.js'
 import Performance_Admin from './Admin/Performance-admin.js'
 import './App.css'
+import PaymentPage from './Common/PaymentPage';
 
 import QuizApp_1 from './Student/QuizApp-1.js'
 import QuizApp_2 from './Student/QuizApp-2.js'
@@ -51,6 +52,7 @@ function App() {
           <Route path="/attendance" element={<ProtectedRoute><Attendance /></ProtectedRoute>} />
           <Route path="/performance" element={<Performance />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/payment" element={<PaymentPage/>}></Route>
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Home />} />
