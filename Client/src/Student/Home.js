@@ -1,7 +1,7 @@
 import React from 'react';
 import Footer from '../Common/Footer';
 import '../App.css'
-import '../Styles/home.css';
+import '../Styles/Home.css';
 import {Link} from 'react-router-dom';
 
 export default function Home() {
@@ -23,17 +23,17 @@ export default function Home() {
           <div className="course-card">
             <img src="/images/WebDevLogo.png" alt="Web Development" />
             <h3>Web Development</h3>
-            <Link to="/quiz"><button className="ria-button">Start</button></Link>
+            <Link to="/quiz-Web_dev"><button className="ria-button">Start</button></Link>
           </div>
           <div className="course-card">
             <img src="/images/MLlogo.png" alt="Machine Learning" />
             <h3>Machine Learning</h3>
-            <Link to="/quiz"><button className="ria-button">Start</button></Link>
+            <Link to="/quiz-ML"><button className="ria-button">Start</button></Link>
           </div>
           <div className="course-card">
             <img src="/images/CppLogo.png" alt="C++ Programming" />
             <h3>C++ Programming</h3>
-            <Link to="/quiz"><button className="ria-button">Start</button></Link>
+            <Link to="/quiz-Cpp"><button className="ria-button">Start</button></Link>
           </div>
         </div>
       </section>

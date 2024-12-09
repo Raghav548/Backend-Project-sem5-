@@ -6,13 +6,29 @@ function QuizApp() {
   const [quizData, setQuizData] = useState([]);
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useEffect(() => {
     // Fetch quiz data from the backend
-    fetch('http://localhost:4000/api/get-quiz')
+    fetch('http://localhost:4000/api/get-quiz-2', {
+      credentials: 'include',
+    })
       .then((res) => res.json())
       .then((data) => setQuizData(data))
       .catch((err) => console.error(err));
+
+      // Check if the user has already submitted the quiz
+      fetch('http://localhost:4000/api/get-student-Data', {
+        credentials: 'include',
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Data",data);
+          if (data.score[1] !== null) {
+            setHasSubmitted(true);
+          }
+        })
+        .catch((err) => console.error('Error checking submission:', err))
       
   }, []);
 
@@ -24,7 +40,8 @@ function QuizApp() {
     // Prepare the data to send
     const submissionData = {
       answers, // Send the user's answers
-      quizId: 'someQuizId' // Optionally send an identifier for the quiz
+      quizId: 1, // Optionally send an identifier for the quiz
+      spreadSheetId : '1KNqpnZgGk8-5ruXzkKYS2H7EPvC1Pc7P4DDmujCMVTU',
     };
 
     console.log('Submission Data:', submissionData);
@@ -36,11 +53,13 @@ function QuizApp() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(submissionData),
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
         // Backend returns the score
         setScore(data.score); // Assuming the backend sends back a score
+        setHasSubmitted(true);
       })
       .catch((err) => console.error('Error submitting answers:', err));
   };
@@ -53,8 +72,15 @@ function QuizApp() {
             <QuesCard  key={q[0]} q={q} handleAnswerChange={handleAnswerChange} />
           ))}
         
-          <button className='submit-btn' onClick={handleSubmit}>Submit</button>
-          {score !== null && <h2>Your Score: {score}/{quizData.length}</h2>}
+        {hasSubmitted ? (
+          <button className='submit-btn' disabled>
+            You have already submitted the quiz
+          </button>
+        ) : (
+          <button className='submit-btn' onClick={handleSubmit}>
+            Submit
+          </button>
+        )}          {score !== null && <h2>Your Score: {score}/{quizData.length}</h2>}
       </div>
     </div>
   );
