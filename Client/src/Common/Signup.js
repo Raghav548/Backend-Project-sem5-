@@ -22,7 +22,7 @@ const SignUpPage = () => {
       }
     } catch (err) {
       console.error(err);
-      alert("Signup failed");
+      alert(err.response?.data?.message || "Signup failed");
     }
   };
 

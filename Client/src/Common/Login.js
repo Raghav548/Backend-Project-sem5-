@@ -25,9 +25,6 @@ const Login = () => {
         });
   
         const user = userResponse.data;
-
-        console.log(user);
-        
         if (user.username === "admin") {
           navigate("/admin");
         } else {

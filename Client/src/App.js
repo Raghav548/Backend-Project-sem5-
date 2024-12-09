@@ -13,6 +13,9 @@ import Contact from './Student/Performance.js'
 
 import AdminAttendance from './Admin/Attendance.js';
 import AdminStudentInfo from './Admin/StudentInfo.js';
+
+import EditProfileImage from './Student/EditProfileImage.js'
+import UpdateProfile from './Student/UpdateProfile.js'
 import Performance_Admin from './Admin/Performance-admin.js'
 import './App.css'
 
@@ -36,7 +39,9 @@ function App() {
         <Route path="/quiz-Web_dev" element={<ProtectedRoute><QuizApp_1 /></ProtectedRoute>} />
         <Route path="/quiz-ML" element={<ProtectedRoute><QuizApp_2 /></ProtectedRoute>} />
         <Route path="/quiz-Cpp" element={<ProtectedRoute><QuizApp_3 /></ProtectedRoute>} />
-        <Route path='/apply-medical' element={<Medical />}/>
+        <Route path='/apply-medical' element={<ProtectedRoute><Medical /></ProtectedRoute>}/>
+        <Route path='/edit-profile' element={<EditProfileImage />}/>
+        <Route path='/update-profile' element={<UpdateProfile />}/>
 
         {/*Student Routes */}
 
