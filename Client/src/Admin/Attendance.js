@@ -1,5 +1,5 @@
-import '../Styles/Attendance_admin.css'; 
-import '../Styles/Footer.css';
+import '../Styles/attendance_admin.css'; 
+import '../Styles/footer.css';
 import Footer from '../Common/Footer';
 
 import {useState, useEffect} from 'react';

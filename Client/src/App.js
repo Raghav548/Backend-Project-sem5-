@@ -2,23 +2,24 @@ import LoginPage from "./Common/Login.js";
 import SignupPage from "./Common/Signup.js";
 import ProtectedRoute from "./Common/ProtectedRoute.js";
 
-import Navigation from "./Common/Navigation.js";
-import Home from "./Student/Home.js";
-import StudentInfo from "./Student/StudentInfo.js";
-import Register from "./Student/Register.js";
-import Medical from "./Student/Medical.js";
-import Attendance from "./Student/Attendance.js";
-import Performance from "./Student/Performance.js";
-import Contact from "./Student/Performance.js";
+import Navigation from './Common/Navigation.js'
+import Home from './Student/Home.js'
+import StudentInfo from './Student/StudentInfo.js'
+import Register from './Student/Register.js'
+import Medical from './Student/Medical.js'
+import Attendance from './Student/Attendance.js'
+import Performance from './Student/Performance.js'
+
 
 import AdminAttendance from "./Admin/Attendance.js";
 import AdminStudentInfo from "./Admin/StudentInfo.js";
 
-import EditProfileImage from "./Student/EditProfileImage.js";
-import UpdateProfile from "./Student/UpdateProfile.js";
-import Performance_Admin from "./Admin/Performance-admin.js";
-import "./App.css";
-import PaymentPage from "./Common/PaymentPage";
+import EditProfileImage from './Student/EditProfileImage.js'
+import UpdateProfile from './Student/UpdateProfile.js'
+import Performance_Admin from './Admin/Performance-admin.js'
+import Contact_Admin from './Admin/Contact-admin.js'
+import PaymentPage from './Common/PaymentPage';
+import './App.css'
 
 import QuizApp_1 from "./Student/QuizApp-1.js";
 import QuizApp_2 from "./Student/QuizApp-2.js";
@@ -106,8 +107,7 @@ function App() {
             }
           />
           <Route path="/performance" element={<Performance />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/payment" element={<PaymentPage />}></Route>
+          <Route path="/payment" element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}></Route>
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Home />} />
@@ -128,7 +128,7 @@ function App() {
             }
           />
           <Route path="/admin/performance" element={<Performance_Admin />} />
-          <Route path="/admin/contact" element={<Contact />} />
+          <Route path="/admin/contact" element={<Contact_Admin />} />
         </Route>
       </Routes>
     </Router>

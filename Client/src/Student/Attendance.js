@@ -1,4 +1,4 @@
-import "../Styles/Attendance.css"
+import "../Styles/attendance.css"
 import {useState, useEffect} from 'react';
 
 const Attendance = () => {
@@ -7,7 +7,6 @@ const Attendance = () => {
 
   const [userName, setUserName] = useState("");
 
-  let username = "";
   const fetchData = async () => {
     try{
       const response = await fetch(`http://localhost:4000/attendance/fetchAttendance`, {method : "GET", credentials : "include"});

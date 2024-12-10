@@ -259,7 +259,6 @@ router.post('/update-user', async (req, res) => {
     if(oldUsername !== username) { // Destroy the cookie if the username is changed
       res.clearCookie('token', {
         httpOnly: true,
-        
       });
     }
 

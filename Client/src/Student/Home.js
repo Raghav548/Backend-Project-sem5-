@@ -1,7 +1,7 @@
 import React from 'react';
 import Footer from '../Common/Footer';
 import '../App.css'
-import '../Styles/Home.css';
+import '../Styles/home.css';
 import {Link} from 'react-router-dom';
 
 export default function Home() {
