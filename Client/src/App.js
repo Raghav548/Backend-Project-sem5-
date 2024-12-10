@@ -9,7 +9,6 @@ import Register from './Student/Register.js'
 import Medical from './Student/Medical.js'
 import Attendance from './Student/Attendance.js'
 import Performance from './Student/Performance.js'
-import Contact from './Student/Performance.js'
 
 import AdminAttendance from './Admin/Attendance.js';
 import AdminStudentInfo from './Admin/StudentInfo.js';
@@ -17,8 +16,9 @@ import AdminStudentInfo from './Admin/StudentInfo.js';
 import EditProfileImage from './Student/EditProfileImage.js'
 import UpdateProfile from './Student/UpdateProfile.js'
 import Performance_Admin from './Admin/Performance-admin.js'
-import './App.css'
+import Contact_Admin from './Admin/Contact-admin.js'
 import PaymentPage from './Common/PaymentPage';
+import './App.css'
 
 import QuizApp_1 from './Student/QuizApp-1.js'
 import QuizApp_2 from './Student/QuizApp-2.js'
@@ -51,15 +51,14 @@ function App() {
           <Route path="/student" element={<ProtectedRoute><StudentInfo /></ProtectedRoute>} />
           <Route path="/attendance" element={<ProtectedRoute><Attendance /></ProtectedRoute>} />
           <Route path="/performance" element={<Performance />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/payment" element={<PaymentPage/>}></Route>
+          <Route path="/payment" element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}></Route>
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Home />} />
           <Route path="/admin/attendance" element={<ProtectedRoute><AdminAttendance /></ProtectedRoute>} />
           <Route path="/admin/student" element={<ProtectedRoute><AdminStudentInfo /></ProtectedRoute>} />
           <Route path="/admin/performance" element={<Performance_Admin />} />
-          <Route path="/admin/contact" element={<Contact />} />
+          <Route path="/admin/contact" element={<Contact_Admin />} />
         </Route>
 
       </Routes>

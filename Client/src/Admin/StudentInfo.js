@@ -1,4 +1,4 @@
-import '../Styles/Attendance.css';
+import '../Styles/attendance.css';
 import {useState, useEffect} from 'react';
 
 export default function Info () {

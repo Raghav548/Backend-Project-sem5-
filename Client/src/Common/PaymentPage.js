@@ -1,4 +1,5 @@
 import React from "react";
+import '../Styles/info.css';
 
 const PaymentPage = () => {
   const handlePayment = async () => {
@@ -63,8 +64,38 @@ const PaymentPage = () => {
   };
   return (
     <div>
+
       <h1></h1>
-      <button onClick={handlePayment}>Pay Now</button>
+
+      <div 
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <button
+          onClick={handlePayment}
+          style={{
+            padding: "15px 30px",
+            fontSize: "20px",
+            fontWeight: "bold",
+            color: "#fff",
+            backgroundColor: "#007bff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            transition: "background-color 0.3s ease",
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
+          onMouseOut={(e) => (e.target.style.backgroundColor = "#007bff")}
+        >
+          Pay Now
+        </button>
+
+      </div>
+
     </div>
   );
 };

@@ -102,8 +102,14 @@ const Header = () => {
           <li><NavLink to={isAdmin ? "/admin/student" : "/student"}>Student Info</NavLink></li>
           <li><NavLink to={isAdmin ? "/admin/attendance" : "/attendance"}>Attendance</NavLink></li>
           <li><NavLink to={isAdmin ? "/admin/performance" : "/performance"}>Performance</NavLink></li>
-          <li><NavLink to = {isAdmin ? "/admin/contact" : "/contact"}>Contact Us</NavLink></li>
-          <li><NavLink to="/payment">Payment</NavLink></li>
+          <li>
+            {isAdmin ? (
+              <NavLink to="/admin/contact">Contact Us</NavLink>
+            ) : (
+              <NavLink to="/payment">Payment</NavLink>
+            )}
+          </li>
+
           <div className="auth-buttons" style={isAuthenticated ? { padding: "0px" } : { padding: "15px" }}>
             {isAuthenticated ? (
                 <div className="profile-container">
