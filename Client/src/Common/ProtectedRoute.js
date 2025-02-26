@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
     const checkAuth = async () => {
       try {
         // Verify authentication from the backend
-        const response = await axios.get("http://localhost:4000/api/auth/verify", {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/verify`, {
           withCredentials: true, // Send cookies for auth
         });
         setIsAuthenticated(response.status === 200);
@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
   if (isAuthenticated === null) {
     return <div style={{ textAlign: "center" }}>Loading...</div>;
   }
-
+  
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

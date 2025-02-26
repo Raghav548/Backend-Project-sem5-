@@ -10,7 +10,7 @@ function QuizApp() {
 
   useEffect(() => {
     // Fetch quiz data from the backend
-    fetch('http://localhost:4000/api/get-quiz-1', {
+    fetch(`${process.env.REACT_APP_API_URL}/api/get-quiz-1`, {
       credentials: 'include',
     })
       .then((res) => res.json())
@@ -18,7 +18,7 @@ function QuizApp() {
       .catch((err) => console.error(err));
 
      // Check if the user has already submitted the quiz
-     fetch('http://localhost:4000/api/get-student-Data', {
+     fetch(`${process.env.REACT_APP_API_URL}/api/get-student-Data`, {
       credentials: 'include',
     })
       .then((res) => res.json())
@@ -46,7 +46,7 @@ function QuizApp() {
     console.log('Submission Data:', submissionData);
   
     // Send data to the backend
-    fetch('http://localhost:4000/api/submit-quiz', {
+    fetch(`${process.env.REACT_APP_API_URL}/api/submit-quiz`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

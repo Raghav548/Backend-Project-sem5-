@@ -12,7 +12,7 @@ const Header = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/auth/verify", {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/verify`, {
           withCredentials: true, // Send cookies for auth
         });
 
@@ -37,11 +37,16 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:4000/api/auth/logout",
+        `${process.env.REACT_APP_API_URL}/api/auth/logout`,
         {},
         { withCredentials: true } // Send cookies to server
       );
+      
       setIsAuthenticated(false); // Update state
+
+      // Reload the site
+      window.location.reload();
+
     } catch (error) {
       console.error("Logout failed:", error.response?.data || error.message);
     }
@@ -82,7 +87,7 @@ const Header = () => {
 
 
   const fetchData = async () => {
-    const response = await fetch("http://localhost:4000/student-info", {method : "GET", credentials: "include"});
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/student-info`, {method : "GET", credentials: "include"});
     const data = await response.json();
     console.log("Profile image url -> ", data.profileimg);
     setNewProfileImage(data.profileimg);

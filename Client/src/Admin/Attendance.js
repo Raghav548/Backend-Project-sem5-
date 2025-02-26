@@ -11,7 +11,7 @@ export default function Attendance() {
 
   const fetchData = async () => {
     try{
-      const response = await fetch("http://localhost:4000/admin/student", {method : "GET",credentials: "include"});
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admin/student`, {method : "GET",credentials: "include"});
       const data = await response.json();
       setStudentData(data);
     } catch(err) {
@@ -35,12 +35,12 @@ export default function Attendance() {
     // reduce() is a JavaScript array method that iterates over all elements in an array and accumulates a result into a single value (in this case, an object).
 
     const initialAttendance = studentData.reduce((acc, student) => {
-      if (student.username !== "admin" && student.fullname) {
-        acc[student.username] = 'present'; // Default value of 'present' for each student
-      }
-      return acc;
-    }, {}); // <- Here, {} is the initial value of accumulator(acc)
-
+        if (student.username !== "admin" && student.fullname) {
+          acc[student.username] = "present"; // Default value of 'present' for each student
+        }
+        return acc;
+      }, {});
+  
     setAttendanceData(initialAttendance);
 
   }, [studentData]);
@@ -48,13 +48,11 @@ export default function Attendance() {
 
   // Updating the attendanceData state when a dropdown value changes ->
   const handleAttendanceChange = (username, value) => {
-    if (value === 'absent') {
       setAttendanceData((prevData) => { // setter function can also take a callback arrow function, run logic inside the arrow function and return the updated value like this.
         const updatedArr = {...prevData}; // Create a copy of the target array
         updatedArr[username] = value; // Update the value at the given index
         return updatedArr;
       });
-    }
   };
 
   const handleSubmit = async (event) => {
@@ -74,7 +72,7 @@ export default function Attendance() {
 
     // Sending the data to the backend API
     try {
-      const response = await fetch("http://localhost:4000/admin/attendance", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admin/attendance`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

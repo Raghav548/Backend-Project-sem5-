@@ -9,7 +9,7 @@ const Attendance = () => {
 
   const fetchData = async () => {
     try{
-      const response = await fetch(`http://localhost:4000/attendance/fetchAttendance`, {method : "GET", credentials : "include"});
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/attendance/fetchAttendance`, {method : "GET", credentials : "include"});
       const data = await response.json();
       console.log(data);
       const {student, username } = data;

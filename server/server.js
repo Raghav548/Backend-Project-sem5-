@@ -15,7 +15,7 @@ const {router:authRoutes,verifyToken} = require("./routes/auth");
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT;
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, serverSelectionTimeoutMS: 5000 })
   .then(() => {
     console.log('Connected to MongoDB');
   })

@@ -12,7 +12,7 @@ const Performance = () => {
     useEffect(() => {
         const fetchStudents = async () => {
           try {
-            const response = await axios.get("http://localhost:4000/admin/student", { withCredentials: true });
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/admin/student`, { withCredentials: true });
             setStdList(response.data);
             //setFilteredStdList(response.data);
           } catch (err) {
