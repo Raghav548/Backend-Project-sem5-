@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault(); // Prevent form submission refresh
     try {
       const response = await axios.post(
-        'http://localhost:4000/api/auth/login',
+        `${process.env.REACT_APP_API_URL}/api/auth/login`,
         { username, password },
         { withCredentials: true }
       );
@@ -20,7 +20,7 @@ const Login = () => {
       console.log('Response status code:', response.status);
 
       if (response.status === 200) {
-        const userResponse = await axios.get("http://localhost:4000/api/auth/verify", {
+        const userResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/verify`, {
           withCredentials: true,
         });
   

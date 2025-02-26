@@ -18,17 +18,6 @@ router.post("/attendance",verifyToken, (request, response) => {
 
 })
 
-
-// router.get("/student", verifyToken, async (request, response) => {
-
-//   const students = await Users.find();
-
-//   response.json(students);
-
-//   // response.render("admin/student-info", {pageTitle : "Attendance", path : "/admin/student", students : students, user:request.session.user});
-
-// })
-
 router.get("/student", verifyToken, async (request, response) => {
   try {
     // Fetch all students

@@ -9,7 +9,7 @@ const Info = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/student-info`, { method: "GET" , credentials: "include"});
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/student-info`, { method: "GET" , credentials: "include"});
 
       const data = await response.json();
       console.log(data);

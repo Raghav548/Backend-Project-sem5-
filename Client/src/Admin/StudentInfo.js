@@ -6,7 +6,7 @@ export default function Info () {
   const [stdList, setStdList] = useState([]);
 
   const fetchData = async () => {
-    const response = await fetch("http://localhost:4000/admin/student", {method : "GET", credentials: "include"});
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/admin/student`, {method : "GET", credentials: "include"});
     const data = await response.json();
     console.log(data);
     setStdList(data);

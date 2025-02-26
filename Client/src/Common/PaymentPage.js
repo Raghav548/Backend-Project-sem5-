@@ -5,7 +5,7 @@ const PaymentPage = () => {
   const handlePayment = async () => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/payment/create-order",
+        `${process.env.REACT_APP_API_URL}/api/payment/create-order`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -32,7 +32,7 @@ const PaymentPage = () => {
         //below handler is the callback function that is trigerred after successfull payment.
         handler: async (response) => {
           const verifyResponse = await fetch(
-            "http://localhost:4000/api/payment/verify-payment",
+            `${process.env.REACT_APP_API_URL}/api/payment/verify-payment`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },

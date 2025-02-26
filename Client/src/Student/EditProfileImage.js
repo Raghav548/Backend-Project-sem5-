@@ -16,7 +16,7 @@ const EditProfileImage = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/student-info', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/student-info`, {
           withCredentials: true, // To send cookies if necessary
         });
 
@@ -63,7 +63,7 @@ const EditProfileImage = () => {
 
       console.log(file);
   
-      const response = await axios.post('http://localhost:4000/update-profile-pic', formData, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/update-profile-pic`, formData, {
         withCredentials: true,
       });
   
@@ -84,7 +84,7 @@ const EditProfileImage = () => {
     setIsValidating(true);
   
     try {
-      const response = await axios.post('http://localhost:4000/validate-password', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/validate-password`, {
         username: userName, // Pass username or identifier
         oldPassword: passWord, // Pass old password for validation
       });

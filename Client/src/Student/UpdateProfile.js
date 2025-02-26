@@ -15,7 +15,7 @@ const UpdateProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/update-user', 
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/update-user`, 
         formData,
         {withCredentials : true}
       );
@@ -32,7 +32,7 @@ const UpdateProfile = () => {
 
   const fetchData = async () => {
     try{
-      const response = await fetch(`http://localhost:4000/student-info`, {method : "GET", credentials : "include"});
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/student-info`, {method : "GET", credentials : "include"});
       const data = await response.json();
       console.log(data);
       const {student, username} = data;
