@@ -46,6 +46,9 @@ router.post('/signup', async (req, res) => {
 
 // Login route
 router.post('/login', async (req, res) => {
+    
+    console.log("received request");
+    const { username, password } = req.body;
 
     try {
         const user = await Users.findOne({ username });
@@ -64,7 +67,7 @@ router.post('/login', async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,  // Prevents JavaScript access (Security)
             secure: true,    // Ensures cookies are sent only over HTTPS (Required on Render)
-            sameSite: "None", // Allow cross-site cookies (If your frontend (Vercel) and backend (Render) are on different domains)
+            sameSite: 'None', // Allow cross-site cookies (If your frontend (Vercel) and backend (Render) are on different domains)
             maxAge: 3600000, // 1 hour expiration
         });
 
