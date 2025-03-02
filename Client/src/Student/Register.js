@@ -1,6 +1,6 @@
 import React from "react";
 import {useState} from "react";
-import "../Styles/register.css";
+import "../Styles/Register.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({}); // <- When handleChange is called for the 1st time, This object is the "prevFormData" object.

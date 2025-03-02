@@ -1,5 +1,5 @@
 import React from "react";
-import '../Styles/info.css';
+import '../Styles/Info.css';
 
 const PaymentPage = () => {
   const handlePayment = async () => {
