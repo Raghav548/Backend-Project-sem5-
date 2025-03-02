@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { NavLink, Navigate, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, Outlet } from "react-router-dom";
 import axios from "axios"; // Ensure axios is installed and imported
 
 const Header = () => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import '../Styles/info.css';
+import '../Styles/Info.css';
 import {NavLink } from 'react-router-dom';
 
 const Info = () => {

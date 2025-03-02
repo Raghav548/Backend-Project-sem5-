@@ -1,4 +1,4 @@
-import "../Styles/attendance.css"
+import "../Styles/Attendance.css"
 import {useState, useEffect} from 'react';
 
 const Attendance = () => {

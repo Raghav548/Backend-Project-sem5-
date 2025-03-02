@@ -1,5 +1,4 @@
 import { Pie } from 'react-chartjs-2';
-import { useEffect, useState } from 'react';
 
 import {
   Chart as ChartJS,
@@ -18,16 +17,6 @@ ChartJS.register(
 
 const PieChart = (props) => {
   const { attendance } = props;
-  const [chartData, setChartData] = useState([]);
-
-  useEffect(() => {
-    if (attendance) {
-      setChartData(attendance);
-    }
-   
-  }, [attendance]);
-
-
   
     const pieChartData = {
         labels: ['attended','delivered'],
