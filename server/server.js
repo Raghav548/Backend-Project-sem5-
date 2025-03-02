@@ -26,7 +26,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, se
 // Allowing cross-origin requests for your React client ->
 // Enable CORS with specific origin and credentials
 app.use(cors({
-  origin: 'https://backend-project-sem5-wjd3-raghav-kakkars-projects.vercel.app/', // Allow only this origin
+  origin: 'https://backend-project-sem5-wjd3-raghav-kakkars-projects.vercel.app', // Allow only this origin
   credentials: true, // Allow cookies and other credentials
 }));
 app.use(cookieParser());
