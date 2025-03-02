@@ -35,7 +35,6 @@ const studentSchema = new mongoose.Schema(
     state: { type: String },
     nat: { type: String },
     profileimg : {type: String},
-    profileimgindex : {type: String},
     attendance : attendanceSchema,
     medicalRecords : [ medicalSchema ], // Array of medical records
     score :{type: [Number], default: [null, null, null] }
@@ -57,31 +56,15 @@ studentSchema.pre('save', async function(next) { // We can use "this" keyword in
     this.password = await bcrypt.hash(this.password, salt);
   }
 
-  if(this.isModified('profileimg')){
-    this.profileimg = await bcrypt.hash(this.profileimg, salt);
-  }
-
   next();
 })
 
 const Users = mongoose.model('Users', studentSchema);
 
 // *********************************************************************************************************
-// pre-save hook to save hashed file path
 
-medicalSchema.pre('save', async function(next) {
-
-  if(this.isNew){
-
-    const salt = await bcrypt.genSalt(10);
-
-    this.filePath = await bcrypt.hash(this.filePath, salt);
-  }
-  next();
-})
-
-// *********************************************************************************************************
 // Function to markAttendance
+
 async function markAttendance(rollnos, attendance){
 
   const students = await Users.find(); // find() returns an array of student objects

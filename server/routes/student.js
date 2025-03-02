@@ -7,7 +7,15 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const router = express.Router();
 
+const cloudinary = require('cloudinary').v2;
+
 const { Users }= require('../models/user');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 function tokenVerifier(req, res) {
   // Step 1: Extract token
@@ -103,20 +111,8 @@ router.get("/student-info", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let profileimg = null;
-
-    if(student.profileimg) {
-      const { profileimgindex } = student;
-      const filename = `profile-${profileimgindex}.png`;
-      const filepath = path.join(__dirname, '..', 'uploads', 'profile-pictures', filename);
-    
-      if (fs.existsSync(filepath)) { // Checking whether the "profileimg" value present in mongoDB matches the file present in uploads folder. 
-        profileimg = `http://localhost:4000/uploads/profile-pictures/${filename}`; // PROFILE PICTURE MUST BE IN PNG FORMAT
-      }
-    }
-    
     // Step 4: Respond with student data
-    res.json({student, username, profileimg});
+    res.json({student, username, profileimg : student.profileimg});
 
   } catch (error) {
     console.error(error);
@@ -126,38 +122,25 @@ router.get("/student-info", async (req, res) => {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Single multer setup for both medicals and profile-pics ->
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Dynamically set the destination folder based on the route or request data
-    if (req.url === '/medical-form-submit') {
-      cb(null, 'uploads/medicals');
-    } else if (req.url === '/update-profile-pic') {
-      cb(null, 'uploads/profile-pictures');
-    } else {
-      cb(new Error('Invalid upload route'), null); // Reject the upload
-    }
-  },
-  filename: (req, file, cb) => {
-    const decoded = tokenVerifier(req, res); // Decode token to get user details
-    let uniqueSuffix;
-    
-    if (req.url === '/medical-form-submit') {
-      uniqueSuffix = `medical-${Math.floor(Math.random() * 90) + 10}`;
-    } else if (req.url === '/update-profile-pic') {
-      uniqueSuffix = `profile-${Math.floor(Math.random() * 90) + 10}`;
-    } else {
-      return cb(new Error('Invalid upload route'), null);
-    }
-    
-    const extension = file.mimetype.split('/')[1]; // Extract file extension
-    cb(null, uniqueSuffix + "." + extension);
-  },
-});
-
+// Multer setup for file handling
+const storage = multer.memoryStorage(); // Store files in memory temporarily
 const upload = multer({ storage });
 
+// Function to upload medical files to Cloudinary
+const uploadMedicalsToCloudinary = (fileBuffer, fileName) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      {
+        public_id: fileName, // Assign a unique filename
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result.secure_url); // Return Cloudinary URL
+      }
+    ).end(fileBuffer);
+  });
+};
 
 router.post("/medical-form-submit", upload.single("file"), async (req, res) => {
 
@@ -166,6 +149,12 @@ router.post("/medical-form-submit", upload.single("file"), async (req, res) => {
     const { name, rollNumber, department, startDate, endDate } = req.body;
     console.log(req.body);
     console.log(req.file.path);
+
+    // Generate a unique file name for Cloudinary
+    const fileName = `medical_${rollNumber}_${Date.now()}`;
+
+    // Upload file to Cloudinary with tags
+    const cloudinaryUrl = await uploadMedicalsToCloudinary(req.file.buffer, fileName);
 
     // Create and save a new document
     const student = await Users.findOne({rollno : Number(rollNumber), fullname : name.trim()});
@@ -176,7 +165,7 @@ router.post("/medical-form-submit", upload.single("file"), async (req, res) => {
       department,
       startDate,
       endDate,
-      filePath: req.file.path, // Save the uploaded file's path
+      filePath: cloudinaryUrl, // Store Cloudinary URL instead of local path
     };
 
     student.medicalRecords.push(newMedicalRecord);
@@ -190,6 +179,21 @@ router.post("/medical-form-submit", upload.single("file"), async (req, res) => {
   }
 });
 
+// Function to upload profile picture files to Cloudinary
+const uploadProfilesToCloudinary = (fileBuffer, fileName) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      {
+        public_id: fileName, // Use unique filename
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result.secure_url); // Return Cloudinary URL
+      }
+    ).end(fileBuffer);
+  });
+};
 
 router.post("/update-profile-pic", upload.single("profileimg"), async (req, res) => {
   try {
@@ -200,17 +204,13 @@ router.post("/update-profile-pic", upload.single("profileimg"), async (req, res)
     // request.file (or request.files in the case of multiple files) is a property that is automatically added to the request object by Multer, a middleware used for handling multipart/form-data requests, such as file uploads.
     console.log("This is the uploaded file -> ", req.file); // Contains the profile image file
 
+    const fileName = `profile_${username}_${Date.now()}`;
+
+    const cloudinaryUrl = await uploadProfilesToCloudinary(req.file.buffer, fileName);
+
     const student = await Users.findOne({username});
 
-    student.profileimg = req.file.path;
-
-    const filePath = req.file.path; // Example: 'uploads\\profile-pictures\\profile-67.png'
-    const parts = filePath.split('\\'); // Split by '\\'
-    const filename = parts[parts.length - 1]; // Get the last part (profile-67.png)
-    const fileParts = filename.split('-'); // Split the filename by '-'
-    const number = fileParts[1].split('.')[0]; // Get the number before the extension
-
-    student.profileimgindex = number;
+    student.profileimg = cloudinaryUrl;
 
     await student.save();
 
