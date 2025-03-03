@@ -8,9 +8,6 @@ const cookieParser = require("cookie-parser");
 
 const {router:authRoutes,verifyToken} = require("./routes/auth");
 
-
-
-
 // Connecting Express with MongoDB ->
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT;
@@ -25,8 +22,11 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, se
 
 // Allowing cross-origin requests for your React client ->
 // Enable CORS with specific origin and credentials
+
+const allowedOrigins = ['http://localhost:3000', 'https://backend-project-sem5-wjd3-raghav-kakkars-projects.vercel.app', 'https://backend-project-sem5.vercel.app'];
+
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow only this origin
+  origin: allowedOrigins,
   credentials: true, // Allow cookies and other credentials
 }));
 app.use(cookieParser());
@@ -45,7 +45,6 @@ app.use("/admin", adminRoutes);
 app.use(userRoutes);
 app.use(quizRoutes);
 app.use("/api/payment", razorpayRoutes); // Razorpay payment routes
-
 
 
 app.listen(port, () => {

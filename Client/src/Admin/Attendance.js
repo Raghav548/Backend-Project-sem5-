@@ -107,14 +107,34 @@ export default function Attendance() {
                 student.fullname && student.rollno && student.username !==  "admin" ? (
 
                     <div className="std-card" key={index}>
-                      <img src={student.profileimg || "../images/Profile.png"} alt="Profile" 
-                        style={{
-                          borderRadius: "50%", // Rounds the corners
-                          width: "100px", // Adjust as needed
-                          height: "100px", // Adjust to maintain aspect ratio
-                          objectFit: "cover" // Ensures the image scales correctly within the rounded frame
-                        }}
-                      />
+                      { student.profileimg ? (
+                        <img src={student.profileimg} alt="Profile" 
+                          style={{
+                            borderRadius: "50%", // Rounds the corners
+                            width: "100px", // Adjust as needed
+                            height: "100px", // Adjust to maintain aspect ratio
+                            objectFit: "cover" // Ensures the image scales correctly within the rounded frame
+                          }}
+                        />
+                        ) : (
+                          <div
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              borderRadius: "50%",
+                              backgroundColor: "#133C55",
+                              color: "white",
+                              fontSize: "40px",
+                              fontWeight: "bold",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {student.username.charAt(0).toUpperCase()}
+                          </div>
+                        )
+                      }
 
                       <p>{student.fullname}</p>
 

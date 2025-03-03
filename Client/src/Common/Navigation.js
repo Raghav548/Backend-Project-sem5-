@@ -7,6 +7,7 @@ const Header = () => {
   const [isAdmin, setIsAdmin] = useState(false); // Default: Not admin
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Manage dropdown visibility
   const [newProfileImage, setNewProfileImage] = useState(null); // Manage Profile image update
+  const [userInitial, setUserInitial] = useState("");
 
   // Check authentication status when the component mounts
   useEffect(() => {
@@ -64,7 +65,8 @@ const Header = () => {
     const handleClickOutside = (event) => {
       const dropdown = document.getElementById('dropdownMenu');
       const profilePic = document.querySelector('.profile-pic');
-      if (dropdown && !dropdown.contains(event.target) && event.target !== profilePic) {
+      const profileLetter = document.querySelector('.profile-letter');
+      if (dropdown && !dropdown.contains(event.target) && event.target !== profilePic && event.target !== profileLetter) {
         
         // The "event.target" refers to the element that was clicked.
         // "dropdown.contains(event.target)" checks if the element, that is clicked anywhere on the website, is present inside the dropdownMenu div or not. If not it returns false, else true.
@@ -90,7 +92,11 @@ const Header = () => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/student-info`, {method : "GET", credentials: "include"});
     const data = await response.json();
     console.log("Profile image url -> ", data.profileimg);
+    console.log("Username -> ", data.username);
     setNewProfileImage(data.profileimg);
+    if(data.username){
+      setUserInitial(data.username.charAt(0).toUpperCase());
+    }
   }
 
   useEffect(() => {
@@ -117,13 +123,18 @@ const Header = () => {
 
           <div className="auth-buttons" style={isAuthenticated ? { padding: "0px" } : { padding: "15px" }}>
             {isAuthenticated ? (
-                <div className="profile-container">
+                <div className={`profile-container ${newProfileImage ? "with-image" : "without-image"}`}>
+                { newProfileImage ? (
                   <img 
-                    src={newProfileImage || "/images/Profile.png"}
+                    src={newProfileImage}
                     alt="Profile Picture" 
                     className="profile-pic"
                     onClick={toggleDropdown}
                   />
+                  ) : (
+                    <div className="profile-letter" onClick={toggleDropdown}>{userInitial}</div>
+                  )
+                }
 
                   {isDropdownVisible && (
                     <div class="dropdown-menu" id="dropdownMenu">

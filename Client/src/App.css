@@ -86,10 +86,12 @@ h1{
   width: max-content;
 }
 
-
 /* Profile Picture Styling */
+.profile-container{
+  position: relative;
+}
 
-.profile-container {
+.profile-container.with-image{
   position: relative;
   top: 2px;
 }
@@ -104,8 +106,29 @@ h1{
   transition: border-color 0.3s ease;
 }
 
+.profile-letter {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #133C55; /* Blue background */
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid #ccc;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
 .profile-pic:hover {
-  border-color: #007bff;
+  border-color: #003771;
+}
+
+.profile-letter:hover {
+  border-color: #003771;
+  background-color: #0056b3;
 }
 
 /* Dropdown Menu Styling */

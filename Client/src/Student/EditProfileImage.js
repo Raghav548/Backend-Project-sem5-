@@ -107,11 +107,16 @@ const EditProfileImage = () => {
       <h2>Edit Profile</h2>
       <form onSubmit={handleSaveProfileImage}>
         <div className="profile-image-container">
-          <img
-            src={newProfileImage || "/images/Profile.png"}
-            alt="Profile"
-            className="profile-picture"
-          />
+          {newProfileImage ? (
+            <img 
+              src={newProfileImage}
+              alt="Profile Picture" 
+              className="profile-picture"
+            />
+            ) : (
+              <div className="profile-first-letter">{userName.charAt(0).toUpperCase()}</div>
+            )
+          }
           <div className="edit-overlay">
             <label htmlFor="profileimg-upload" className="edit-icon">
               EDIT
